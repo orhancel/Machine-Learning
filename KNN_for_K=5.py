@@ -2,12 +2,16 @@ import numpy as np
 import math
 
 
-def most_of_labels(knn, labels):###Which label appears in KNN the most
+def most_of_labels(knn_index,knn_dist, labels):###Which label appears in KNN the most
     most_of = 0
     for label in labels:
-        count = list(knn).count(label)
-        if count > most_of:
+        count = list(knn_index).count(label)
+        if count > most_of and count is not 1:
             most_of = label
+
+    if(most_of is 0):
+        index_of_min_distance= np.argmin(knn_dist)
+        return knn_index[index_of_min_distance]
     return most_of
 
 
@@ -84,7 +88,7 @@ def guess_by_euclid(train_data, test_data,train_labels,test_labels,labels):##use
                     knn_index[index] = train_labels[train]
 
         ####WHİCH LABEL APPEARS THE MOST İN KNN FOR K=5
-        guess=most_of_labels(knn_index, labels)
+        guess=most_of_labels(knn_index,knn, labels)
         if  guess == test_labels[test]:
             confussion[guess-1][guess-1]+=1
             match += 1
@@ -134,7 +138,7 @@ def guess_by_manhattan(train_data, test_data,train_labels,test_labels,labels):##
                     knn_index[index] =  train_labels[train]
 
         ####WHİCH LABEL APPEARS THE MOST İN KNN FOR K=5
-        guess = most_of_labels(knn_index, labels)
+        guess = most_of_labels(knn_index,knn, labels)
         if guess == test_labels[test]:
             confussion[guess-1][guess-1] += 1
             match += 1
